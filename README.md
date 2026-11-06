@@ -94,7 +94,7 @@ A configuração padrão da API está em [`appsettings.json`](backend/SamTrainin
 {
   "DatabaseProvider": "PostgreSql",
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Port=5432;Database=sam_training_db;Username=postgres;SENHA"
+    "DefaultConnection": "Host=localhost;Port=5432;Database=sam_training_db;Username=postgres;Password=<DB_PASSWORD>"
   }
 }
 ```
