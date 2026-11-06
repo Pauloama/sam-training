@@ -77,6 +77,13 @@ Para executar localmente:
 
 Para usar apenas o ambiente conteinerizado, Docker Desktop com o Compose é suficiente.
 
+## Obtendo o projeto
+
+```powershell
+git clone https://github.com/pauloama/sam-training.git
+cd sam-training
+```
+
 ## Configuração
 
 ### Banco de dados
@@ -100,7 +107,7 @@ Para desenvolvimento sem PostgreSQL, altere:
 
 Nesse modo, a API usa `Data Source=sam_training.db` quando nenhuma conexão SQLite específica é informada.
 
-> O arquivo `docker-compose.yml` contém `******` como marcador de senha na conexão do backend. Antes de usar Compose, substitua esse marcador por `postgres` (ou altere a senha do serviço PostgreSQL).
+> O arquivo `docker-compose.yml` contém um marcador de credencial na conexão do backend. Antes de usar Compose, substitua esse marcador pelo mesmo valor definido na variável `POSTGRES_PASSWORD`.
 
 ### Storage
 
@@ -130,18 +137,9 @@ O Mobile usa:
 - iOS Simulator: `http://localhost:5000/api`
 - Dispositivo físico: substitua pelo IP da máquina na rede local usando `setApiBaseUrl`.
 
-## Executando no Windows
+## Executando localmente no Windows
 
-Abra um terminal para cada serviço:
-
-```bat
-run-backend.bat
-run-web.bat
-run-ml-worker.bat
-run-mobile.bat
-```
-
-Os scripts apenas mudam para o diretório do componente e executam o comando correspondente. Antes da primeira execução, instale as dependências:
+Antes da primeira execução, instale as dependências:
 
 ```powershell
 dotnet restore backend\SamTraining.slnx
@@ -149,6 +147,24 @@ npm install --prefix frontend-web
 npm install --prefix frontend-mobile
 python -m pip install -r ml-engine\requirements.txt
 ```
+
+Em terminais separados, inicie os serviços:
+
+```powershell
+# Terminal 1 - API
+dotnet run --project backend\SamTraining.Api
+
+# Terminal 2 - Dashboard Web
+npm run dev --prefix frontend-web
+
+# Terminal 3 - Worker de ML
+python ml-engine\worker.py --daemon --api-url http://localhost:5000
+
+# Terminal 4 - Mobile (opcional)
+npm start --prefix frontend-mobile
+```
+
+Os arquivos `.bat` de atalho são locais e estão no `.gitignore`; por isso, eles não fazem parte do clone publicado no GitHub.
 
 Endereços locais:
 
@@ -161,7 +177,19 @@ Endereços locais:
 
 ## Executando com Docker Compose
 
-Depois de corrigir a senha indicada na seção de configuração:
+O arquivo Compose versionado contém um marcador de senha na conexão do backend. Antes de iniciar, substitua essa linha:
+
+```yaml
+ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=sam_training_db;Username=postgres;Password=postgres"
+```
+
+por:
+
+```yaml
+ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=sam_training_db;Username=postgres;Password=postgres"
+```
+
+Depois disso:
 
 ```powershell
 docker compose up --build
@@ -301,11 +329,7 @@ sam-training/
 ├── frontend-mobile/
 ├── ml-engine/
 ├── storage/
-├── docker-compose.yml
-├── run-backend.bat
-├── run-web.bat
-├── run-mobile.bat
-└── run-ml-worker.bat
+└── docker-compose.yml
 ```
 
 ## Scripts de desenvolvimento
