@@ -324,18 +324,6 @@ dotnet build backend\SamTraining.slnx
 dotnet run --project backend\SamTraining.Api
 ```
 
-No estado atual do repositório não há uma suíte de testes automatizados configurada. Recomenda-se validar a API pelo Swagger e executar o build Web e .NET antes de publicar uma alteração.
-
-## Limitações conhecidas
-
-- A API permite CORS de qualquer origem e não possui autenticação/autorização.
-- A conexão de exemplo do Compose precisa ser corrigida antes de iniciar o backend.
-- O upload grava largura e altura padrão (`800x600`), em vez de ler as dimensões reais.
-- O worker usa polling, sem broker ou fila dedicada.
-- A execução local pode iniciar um worker por job; no Compose, o daemon também deve estar disponível.
-- A inferência pode retornar uma categoria aleatória e máscara sintética quando o script Python falha.
-- O script de inferência não recebe automaticamente o checkpoint selecionado pela API.
-- Os caminhos de storage precisam ser compartilhados entre API e worker para o treinamento funcionar corretamente.
 
 ## Licença
 
