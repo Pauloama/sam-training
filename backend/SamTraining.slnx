@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="SamTraining.Api/SamTraining.Api.csproj" />
+  <Project Path="SamTraining.Core/SamTraining.Core.csproj" />
+  <Project Path="SamTraining.Infrastructure/SamTraining.Infrastructure.csproj" />
+</Solution>

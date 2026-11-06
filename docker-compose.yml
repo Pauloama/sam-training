@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sam-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sam_training_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sam-backend
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=sam_training_db;Username=postgres;Password=postgres"
+      Storage__BasePath: "/app/storage"
+      MlEngine__PythonPath: "python"
+    ports:
+      - "5000:5000"
+    volumes:
+      - storage_data:/app/storage
+
+  ml-engine:
+    build:
+      context: ./ml-engine
+      dockerfile: Dockerfile
+    container_name: sam-ml-engine
+    restart: always
+    depends_on:
+      - backend
+    environment:
+      API_URL: "http://backend:5000"
+    volumes:
+      - storage_data:/app/storage
+
+  frontend-web:
+    build:
+      context: ./frontend-web
+      dockerfile: Dockerfile
+    container_name: sam-frontend-web
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  storage_data:
