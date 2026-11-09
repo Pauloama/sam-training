@@ -1,5 +1,7 @@
 # SAM Training
 
+> **Criação:** Esse projeto foi um experimento realizado através de um prompt curto utilizado no Antigravity, seu objetivo era testar e validar a capacidade de criação da IDE e do Gemini 3.8 Flash(Modelo utilizado). O prompt utilizado foi "Olá, seguinte, eu quero que você faça um sistema API RESTful em C#/.NET, utilizando de ASP.NET, Entity Framework, Postgres,  com padrões de MVC e Repository Pattern. Quero que a interface do frontend seja construída em React e React Native e que você utilize Python e Pytorch se necessário, pois o core do sistema será realizar fine tuning do modelo SAM 3. A ideia desse sistema é que ele, através da interface web e mobile, em um modelo fintech de design, receba imagens e classificação dessas imagens, essas imagens por usa vez serão usadas, junto com suas respectivas categorias, para realizar fine tuning do modelo SAM 3 para que ele consiga classificar imagens do tipo inserido."
+
 Plataforma full-stack para organizar imagens de ativos financeiros, executar fine-tuning de um modelo de classificação e segmentação em PyTorch e consultar inferências por meio de interfaces Web, Mobile e uma API REST.
 
 > **Estado atual:** o projeto é um protótipo funcional para experimentação. O pipeline de ML usa uma arquitetura CNN própria chamada `SAM3FintechClassifier`; ele não carrega os pesos oficiais do Meta SAM 3. Quando o script Python não está disponível ou falha, a API usa um fallback heurístico para manter a experiência de demonstração.
